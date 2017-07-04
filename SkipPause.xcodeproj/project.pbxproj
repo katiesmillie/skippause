@@ -7,13 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D3526141F0A703000268060 /* freakonomics.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2D3526131F0A703000268060 /* freakonomics.mp3 */; };
+		2D3526171F0AE72200268060 /* piano.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2D3526161F0AE72200268060 /* piano.mp3 */; };
+		2D35261D1F0BD5DA00268060 /* notetoself.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2D35261C1F0BD5DA00268060 /* notetoself.mp3 */; };
 		2D9DFE4A1F0A6C620097EEE5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9DFE491F0A6C620097EEE5 /* AppDelegate.swift */; };
-		2D9DFE4C1F0A6C620097EEE5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9DFE4B1F0A6C620097EEE5 /* ViewController.swift */; };
+		2D9DFE4C1F0A6C620097EEE5 /* AudioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9DFE4B1F0A6C620097EEE5 /* AudioViewController.swift */; };
 		2D9DFE4F1F0A6C620097EEE5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D9DFE4D1F0A6C620097EEE5 /* Main.storyboard */; };
 		2D9DFE511F0A6C620097EEE5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D9DFE501F0A6C620097EEE5 /* Assets.xcassets */; };
 		2D9DFE541F0A6C620097EEE5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D9DFE521F0A6C620097EEE5 /* LaunchScreen.storyboard */; };
 		2D9DFE5F1F0A6C630097EEE5 /* SkipPauseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9DFE5E1F0A6C630097EEE5 /* SkipPauseTests.swift */; };
 		2D9DFE6A1F0A6C630097EEE5 /* SkipPauseUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9DFE691F0A6C630097EEE5 /* SkipPauseUITests.swift */; };
+		2D9DFE781F0A6C980097EEE5 /* AssetReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9DFE771F0A6C980097EEE5 /* AssetReader.swift */; };
+		2DD4C1601F0BE243001A014E /* SoundFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4C15F1F0BE243001A014E /* SoundFile.swift */; };
+		2DD4C1621F0BF379001A014E /* brass.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2DD4C1611F0BF379001A014E /* brass.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,9 +40,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2D3526131F0A703000268060 /* freakonomics.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = freakonomics.mp3; sourceTree = "<group>"; };
+		2D3526161F0AE72200268060 /* piano.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = piano.mp3; sourceTree = "<group>"; };
+		2D35261C1F0BD5DA00268060 /* notetoself.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = notetoself.mp3; sourceTree = "<group>"; };
 		2D9DFE461F0A6C620097EEE5 /* SkipPause.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SkipPause.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D9DFE491F0A6C620097EEE5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		2D9DFE4B1F0A6C620097EEE5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		2D9DFE4B1F0A6C620097EEE5 /* AudioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioViewController.swift; sourceTree = "<group>"; };
 		2D9DFE4E1F0A6C620097EEE5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2D9DFE501F0A6C620097EEE5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2D9DFE531F0A6C620097EEE5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -47,6 +56,9 @@
 		2D9DFE651F0A6C630097EEE5 /* SkipPauseUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SkipPauseUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D9DFE691F0A6C630097EEE5 /* SkipPauseUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkipPauseUITests.swift; sourceTree = "<group>"; };
 		2D9DFE6B1F0A6C630097EEE5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2D9DFE771F0A6C980097EEE5 /* AssetReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetReader.swift; sourceTree = "<group>"; };
+		2DD4C15F1F0BE243001A014E /* SoundFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundFile.swift; sourceTree = "<group>"; };
+		2DD4C1611F0BF379001A014E /* brass.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = brass.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +86,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2D3526151F0A703400268060 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				2D3526161F0AE72200268060 /* piano.mp3 */,
+				2DD4C1611F0BF379001A014E /* brass.mp3 */,
+				2D3526131F0A703000268060 /* freakonomics.mp3 */,
+				2D35261C1F0BD5DA00268060 /* notetoself.mp3 */,
+			);
+			name = Sounds;
+			sourceTree = "<group>";
+		};
 		2D9DFE3D1F0A6C620097EEE5 = {
 			isa = PBXGroup;
 			children = (
@@ -98,8 +121,11 @@
 			isa = PBXGroup;
 			children = (
 				2D9DFE491F0A6C620097EEE5 /* AppDelegate.swift */,
-				2D9DFE4B1F0A6C620097EEE5 /* ViewController.swift */,
+				2D9DFE4B1F0A6C620097EEE5 /* AudioViewController.swift */,
+				2D9DFE771F0A6C980097EEE5 /* AssetReader.swift */,
+				2DD4C15F1F0BE243001A014E /* SoundFile.swift */,
 				2D9DFE4D1F0A6C620097EEE5 /* Main.storyboard */,
+				2D3526151F0A703400268060 /* Sounds */,
 				2D9DFE501F0A6C620097EEE5 /* Assets.xcassets */,
 				2D9DFE521F0A6C620097EEE5 /* LaunchScreen.storyboard */,
 				2D9DFE551F0A6C620097EEE5 /* Info.plist */,
@@ -235,9 +261,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DD4C1621F0BF379001A014E /* brass.mp3 in Resources */,
 				2D9DFE541F0A6C620097EEE5 /* LaunchScreen.storyboard in Resources */,
+				2D35261D1F0BD5DA00268060 /* notetoself.mp3 in Resources */,
 				2D9DFE511F0A6C620097EEE5 /* Assets.xcassets in Resources */,
+				2D3526171F0AE72200268060 /* piano.mp3 in Resources */,
 				2D9DFE4F1F0A6C620097EEE5 /* Main.storyboard in Resources */,
+				2D3526141F0A703000268060 /* freakonomics.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,8 +292,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D9DFE4C1F0A6C620097EEE5 /* ViewController.swift in Sources */,
+				2D9DFE4C1F0A6C620097EEE5 /* AudioViewController.swift in Sources */,
 				2D9DFE4A1F0A6C620097EEE5 /* AppDelegate.swift in Sources */,
+				2D9DFE781F0A6C980097EEE5 /* AssetReader.swift in Sources */,
+				2DD4C1601F0BE243001A014E /* SoundFile.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -514,6 +546,7 @@
 				2D9DFE701F0A6C630097EEE5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2D9DFE711F0A6C630097EEE5 /* Build configuration list for PBXNativeTarget "SkipPauseTests" */ = {
 			isa = XCConfigurationList;
@@ -522,6 +555,7 @@
 				2D9DFE731F0A6C630097EEE5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2D9DFE741F0A6C630097EEE5 /* Build configuration list for PBXNativeTarget "SkipPauseUITests" */ = {
 			isa = XCConfigurationList;
@@ -530,6 +564,7 @@
 				2D9DFE761F0A6C630097EEE5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
