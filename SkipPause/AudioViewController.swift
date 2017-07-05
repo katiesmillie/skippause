@@ -27,6 +27,7 @@ class AudioViewController: UIViewController {
     let notetoself = SoundFile(resource: "notetoself")
     let piano = SoundFile(resource: "piano")
     let brass = SoundFile(resource: "brass")
+    let empty = SoundFile(resource: "empty")
 
     @IBOutlet weak var segementedControl: UISegmentedControl?
     
@@ -44,7 +45,9 @@ class AudioViewController: UIViewController {
     var nowPlaying: SoundFile?
     
     override func viewDidLoad() {
+        nowPlaying = piano
         setUpPlayer()
+        
     }
     
     func setUpPlayer() {
@@ -82,6 +85,8 @@ class AudioViewController: UIViewController {
             nowPlaying = freakonomics
         } else if sender.selectedSegmentIndex == 3 {
             nowPlaying = notetoself
+        } else if sender.selectedSegmentIndex == 4 {
+            nowPlaying = empty
         }
         setUpPlayer()
     }

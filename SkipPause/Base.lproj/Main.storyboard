@@ -37,6 +37,7 @@
                                             <segment title="Brass"/>
                                             <segment title="Freakonomics"/>
                                             <segment title="Note To Self"/>
+                                            <segment title="Empty"/>
                                         </segments>
                                         <color key="tintColor" red="0.72549019609999998" green="0.45098039220000002" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
