@@ -29,7 +29,7 @@ class AssetReader: Operation {
     var samplesWithTimes: [(CGFloat, CMTime)] = []
     var playerItem: AVPlayerItem?
     
-    var decibelThreshold: CGFloat = 60
+    var decibelThreshold: CGFloat = 40
     var sampleDuration: Double?
     
     init(soundFile: SoundFile, completionHandler: @escaping (_ item: AVPlayerItem?) -> ()) {
@@ -71,19 +71,12 @@ class AssetReader: Operation {
     private func render() {
         guard let url = soundFile.playbackURL else { return }
         let asset = AVAsset(url: url)
-        fetchSamples2(from: asset)
+        fetchSamples(from: asset)
         let item = createComposition(asset: asset)
         finish(with: item)
     }
     
     func createComposition(asset: AVAsset) -> AVPlayerItem {
-        
-//        // Try calculating sampleDuration by the difference between consecutive samples
-//        // vs the formula from the documentation
-//        if presentationTimes.count > 1 {
-//            sampleDuration = presentationTimes[1].seconds - presentationTimes[0].seconds
-//        }
-//        
         
         let mutableComposition = AVMutableComposition()
         
@@ -117,6 +110,11 @@ class AssetReader: Operation {
     
     func createComposition2(asset: AVAsset) -> AVPlayerItem {
         
+        // Try calculating sampleDuration by the difference between consecutive samples
+        // vs the formula from the documentation
+        if presentationTimes.count > 1 {
+            sampleDuration = presentationTimes[1].seconds - presentationTimes[0].seconds
+        }
         let mutableComposition = AVMutableComposition()
         
         let type = AVMediaTypeAudio
@@ -126,27 +124,18 @@ class AssetReader: Operation {
         let newTrack = mutableComposition.addMutableTrack(withMediaType: type, preferredTrackID: prefTrackID)
         print(newTrack.asset!.duration.seconds)
         
-        do {
-            let startTime = kCMTimeZero
-            let duration = asset.duration
-            let range = CMTimeRangeMake(startTime, duration)
-            try newTrack.insertTimeRange(range, of: sourceTrack, at: startTime)
-            print(newTrack.asset!.duration.seconds)
-        } catch { print(error) }
-        
-        print(presentationTimes.count)
         presentationTimes.forEach { time in
-            
-            let startTime = time
-            let duration = CMTime(seconds: sampleDuration!, preferredTimescale: 600)
-            let range = CMTimeRangeMake(startTime, duration)
-            newTrack.removeTimeRange(range)
-            
+            do{
+                let startTime = time
+                let duration = CMTime(seconds: sampleDuration!, preferredTimescale: 600)
+                let range = CMTimeRangeMake(startTime, duration)
+                try newTrack.insertTimeRange(range, of: sourceTrack, at: startTime)
+                print(newTrack.asset!.duration.seconds)
+            } catch { print(error) }
         }
-        print(newTrack.asset!.duration.seconds)
+        
         return AVPlayerItem(asset: mutableComposition)
     }
-    
     
     func fetchSamples2(from asset: AVAsset) {
         
@@ -208,10 +197,10 @@ class AssetReader: Operation {
             var blockBuffer: CMBlockBuffer? = nil
             
             CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(readSampleBuffer, nil, &audioBufferList, MemoryLayout<AudioBufferList>.size, nil, nil, UInt32(kCMSampleBufferFlag_AudioBufferList_Assure16ByteAlignment), &blockBuffer)
-       
+            
             let presentationTime: CMTime? = CMSampleBufferGetPresentationTimeStamp(readSampleBuffer)
             print(presentationTime?.seconds)
-
+            
             var sampleOutput: [Int16] = []
             
             let audioBufferListPointer = UnsafeMutableAudioBufferListPointer(&audioBufferList)
@@ -219,19 +208,15 @@ class AssetReader: Operation {
             audioBufferListPointer.forEach { buffer in
                 let samples = UnsafeMutableBufferPointer<Int16>(start: UnsafeMutablePointer(OpaquePointer(buffer.mData)),
                                                                 count: Int(buffer.mDataByteSize)/MemoryLayout<Int16>.size)
-                
                 samples.forEach { sample in
                     sampleOutput += [sample]
                 }
-                
             }
             
             let max = Int(sampleOutput.max()!)
-            print(max)
-            print(abs(max))
             
             
-            if decibel(CGFloat(max)) < decibelThreshold {
+            if decibel(CGFloat(max)) > decibelThreshold {
                 presentationTimes += [presentationTime!]
             }
             
@@ -321,16 +306,15 @@ class AssetReader: Operation {
             print("episode: \(soundFile.resource) -- sample buffer \(sampleBuffer.count) -- presentation time \(presentationTime!.seconds)")
             
             
-            
             // Use sampleBuffer or sampleData
             let totalSamples = sampleData.count / MemoryLayout<UInt8>.size
             
             let downSampledLength = totalSamples / adjustedRate
-            //            let samplesToProcess = downSampledLength * adjustedRate
-            //            guard samplesToProcess > 0 else { continue }
+            let samplesToProcess = downSampledLength * adjustedRate
+            guard samplesToProcess > 0 else { continue }
             
             // Pass in totalSamples for samplesToProcess to process when NOT downsampling
-            let samplesToProcess = totalSamples
+            //            let samplesToProcess = totalSamples
             
             processSamples(fromData: &sampleData,
                            outputSamples: &outputSamples,
@@ -343,6 +327,7 @@ class AssetReader: Operation {
         
         if reader.status == .completed {
             
+            // Nah this doesn't work
             //            normalize()
         }
         
@@ -371,7 +356,6 @@ class AssetReader: Operation {
         
         presentationTimes = normalizedData.filter { $0.0 < filterThreshold }.map { $0.1 }
         
-        
     }
     
     func processSamples(fromData sampleBuffer: inout Data, outputSamples: inout [CGFloat], samplesToProcess: Int, downSampledLength: Int, adjustedRate: Int, filter: [Float], presentationTime: CMTime?) {
@@ -389,17 +373,17 @@ class AssetReader: Operation {
             vDSP_vabs(processingBuffer, 1, &processingBuffer, 1, sampleCount)
             
             //Downsample and average
-            //            var downSampledData = [Float](repeating: 0.0, count: downSampledLength)
-            //            vDSP_desamp(processingBuffer,
-            //                        vDSP_Stride(adjustedRate),
-            //                        filter,
-            //                        &downSampledData,
-            //                        vDSP_Length(downSampledLength),
-            //                        vDSP_Length(adjustedRate))
-            //
+            var downSampledData = [Float](repeating: 0.0, count: downSampledLength)
+            vDSP_desamp(processingBuffer,
+                        vDSP_Stride(adjustedRate),
+                        filter,
+                        &downSampledData,
+                        vDSP_Length(downSampledLength),
+                        vDSP_Length(adjustedRate))
+            
             
             // Use downSampledData instead of processingBuffer when downsampling
-            let downSampledDataCG = processingBuffer.map { CGFloat($0) }
+            let downSampledDataCG = downSampledData.map { CGFloat($0) }
             
             // Remove processed samples
             sampleBuffer.removeFirst(samplesToProcess * MemoryLayout<UInt8>.size)
@@ -409,11 +393,9 @@ class AssetReader: Operation {
                 print(amplitude, presentationTime!)
             }
             
-            
             if decibel(downSampledDataCG.max()!) < decibelThreshold {
                 presentationTimes += [presentationTime!]
             }
-            
             
         }
     }
