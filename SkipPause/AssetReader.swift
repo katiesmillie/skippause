@@ -29,6 +29,7 @@ class AssetReader: Operation {
     var playerItem: AVPlayerItem?
     
     var decibelThreshold: CGFloat = 40
+    var sampleDuration: Double?
     
     init(soundFile: SoundFile, completionHandler: @escaping (_ item: AVPlayerItem?) -> ()) {
         self.soundFile = soundFile
@@ -95,10 +96,10 @@ class AssetReader: Operation {
         print(presentationTimes.count)
         presentationTimes.forEach { time in
             
-        let startTime = time
-        let duration = CMTime(seconds: 1, preferredTimescale: 44100)
-                let range = CMTimeRangeMake(startTime, duration)
-                newTrack.removeTimeRange(range)
+            let startTime = time
+            let duration = CMTime(seconds: sampleDuration!, preferredTimescale: 600)
+            let range = CMTimeRangeMake(startTime, duration)
+            newTrack.removeTimeRange(range)
             
         }
         print(newTrack.asset!.duration.seconds)
@@ -133,10 +134,12 @@ class AssetReader: Operation {
         let formatDescriptions = track.formatDescriptions as! [CMAudioFormatDescription]
         for item in formatDescriptions {
             guard let formatDescription = CMAudioFormatDescriptionGetStreamBasicDescription(item) else { return }
-            sampleRate = formatDescription.pointee.mSampleRate
+            sampleRate = formatDescription.pointee.mSampleRate // 44100
             channelCount = Int(formatDescription.pointee.mChannelsPerFrame)
-            framesPerPacket = Float64(formatDescription.pointee.mFramesPerPacket)
+            framesPerPacket = Float64(formatDescription.pointee.mFramesPerPacket) // 1152
         }
+        
+        sampleDuration = (1 / sampleRate) * framesPerPacket
         
         var adjustedRate: Int = Int(sampleRate)
         
@@ -166,13 +169,13 @@ class AssetReader: Operation {
             let presentationTime: CMTime? = CMSampleBufferGetPresentationTimeStamp(readSampleBuffer)
             CMSampleBufferInvalidate(readSampleBuffer)
             
+            print("episode: \(soundFile.resource) -- sample buffer \(sampleBuffer.count) -- presentation time \(presentationTime!.seconds)")
+            
             let totalSamples = sampleBuffer.count / MemoryLayout<Int16>.size
+            
             let downSampledLength = totalSamples / adjustedRate
             let samplesToProcess = downSampledLength * adjustedRate
-            
             guard samplesToProcess > 0 else { continue }
-            
-            print("episode: \(soundFile.resource) -- sample buffer \(sampleBuffer.count) -- presentation time \(presentationTime!.seconds)")
             
             processSamples(fromData: &sampleBuffer,
                            outputSamples: &outputSamples,
@@ -188,7 +191,6 @@ class AssetReader: Operation {
         }
     }
     
-    // TODO: report progress? (for issue #2)
     func processSamples(fromData sampleBuffer: inout Data, outputSamples: inout [CGFloat], samplesToProcess: Int, downSampledLength: Int, adjustedRate: Int, filter: [Float], presentationTime: CMTime?) {
         
         sampleBuffer.withUnsafeBytes { (samples: UnsafePointer<Int16>) in
@@ -207,7 +209,8 @@ class AssetReader: Operation {
             var downSampledData = [Float](repeating: 0.0, count: downSampledLength)
             vDSP_desamp(processingBuffer,
                         vDSP_Stride(adjustedRate),
-                        filter, &downSampledData,
+                        filter,
+                        &downSampledData,
                         vDSP_Length(downSampledLength),
                         vDSP_Length(adjustedRate))
             
@@ -217,10 +220,11 @@ class AssetReader: Operation {
             // Remove processed samples
             sampleBuffer.removeFirst(samplesToProcess * MemoryLayout<Int16>.size)
             
-            let decibels = downSampledDataCG.map { decibel($0) }
+            let maxDecibel = decibel(downSampledDataCG.max()!)
             
-            let filtered = decibels.filter { $0 < decibelThreshold }
-            if filtered.count == decibels.count, let presentationTime = presentationTime {
+            print("max decibel: \(maxDecibel) -- presentation time \(presentationTime!.seconds) *************************")
+            
+            if maxDecibel < decibelThreshold, let presentationTime = presentationTime {
                 presentationTimes += [presentationTime]
             }
             outputSamples += downSampledDataCG
@@ -228,6 +232,7 @@ class AssetReader: Operation {
     }
     
     func decibel(_ amplitude: CGFloat) -> CGFloat {
+        if amplitude == 0 { return 0 }
         return 20.0 * log10(abs(amplitude))
     }
     
