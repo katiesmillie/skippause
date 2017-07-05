@@ -26,6 +26,7 @@ class AssetReader: Operation {
     
     var soundFile: SoundFile
     var presentationTimes: [CMTime] = []
+    var samplesWithTimes: [(CGFloat, CMTime)] = []
     var playerItem: AVPlayerItem?
     
     var decibelThreshold: CGFloat = 40
@@ -174,9 +175,12 @@ class AssetReader: Operation {
             let totalSamples = sampleBuffer.count / MemoryLayout<Int16>.size
             
             let downSampledLength = totalSamples / adjustedRate
-            let samplesToProcess = downSampledLength * adjustedRate
-            guard samplesToProcess > 0 else { continue }
+//            let samplesToProcess = downSampledLength * adjustedRate
+//            guard samplesToProcess > 0 else { continue }
             
+            // Pass in totalSamples for samplesToProcess to process when NOT downsampling
+            let samplesToProcess = totalSamples
+
             processSamples(fromData: &sampleBuffer,
                            outputSamples: &outputSamples,
                            samplesToProcess: samplesToProcess,
@@ -186,9 +190,38 @@ class AssetReader: Operation {
                            presentationTime: presentationTime)
         }
         
+        if reader.status == .completed {
+            normalize()
+        }
+        
         if reader.status == .failed {
             print("Failed to read audio: \(String(describing: reader.error))")
         }
+    }
+    
+    func normalize() {
+        // Tried normalizing all the data and then filtering because the decibel level
+        // seemed to be relative to the file rather than consistent
+        
+        let filterThreshold: CGFloat = 0.10
+        
+        let max = Int32(samplesWithTimes.map { $0.0 }.max()!)
+        let min = Int32(samplesWithTimes.map { $0.0 }.min()!)
+        let minAbsolute = abs(min)
+        let newMax = max + minAbsolute
+        let newMin = min + minAbsolute
+        
+        let normalizedData = samplesWithTimes.map { amplitude, time -> (CGFloat, CMTime) in
+            let normalized = CGFloat((Int32(amplitude) + minAbsolute) - newMin) / CGFloat(newMax - newMin)
+            print(normalized, time.seconds)
+            return (normalized, time)
+        }
+        presentationTimes = normalizedData.filter { $0.0 < filterThreshold }.map { $0.1 }
+        
+        
+        // Try calculating sampleDuration by the difference between consecutive samples
+        // (vs the formula 
+        sampleDuration = normalizedData[4].1.seconds - normalizedData[3].1.seconds
     }
     
     func processSamples(fromData sampleBuffer: inout Data, outputSamples: inout [CGFloat], samplesToProcess: Int, downSampledLength: Int, adjustedRate: Int, filter: [Float], presentationTime: CMTime?) {
@@ -215,19 +248,15 @@ class AssetReader: Operation {
                         vDSP_Length(adjustedRate))
             
             
-            let downSampledDataCG = downSampledData.map { CGFloat($0) }
+            // Use downSampledData instead of processingBuffer when downsampling
+            let downSampledDataCG = processingBuffer.map { CGFloat($0) }
             
             // Remove processed samples
             sampleBuffer.removeFirst(samplesToProcess * MemoryLayout<Int16>.size)
             
-            let maxDecibel = decibel(downSampledDataCG.max()!)
-            
-            print("max decibel: \(maxDecibel) -- presentation time \(presentationTime!.seconds) *************************")
-            
-            if maxDecibel < decibelThreshold, let presentationTime = presentationTime {
-                presentationTimes += [presentationTime]
+            if let amplitude = downSampledDataCG.max() {
+                samplesWithTimes += [(amplitude, presentationTime!)]
             }
-            outputSamples += downSampledDataCG
         }
     }
     
