@@ -1,0 +1,6 @@
+framework module Pods_SkipPauseUITests {
+  umbrella header "Pods-SkipPauseUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
