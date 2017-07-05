@@ -77,6 +77,14 @@ class AssetReader: Operation {
     }
     
     func createComposition(asset: AVAsset) -> AVPlayerItem {
+        
+        // Try calculating sampleDuration by the difference between consecutive samples
+        // vs the formula from the documentation
+        if presentationTimes.count > 1 {
+            sampleDuration = presentationTimes[1].seconds - presentationTimes[0].seconds
+        }
+        
+        
         let mutableComposition = AVMutableComposition()
         
         let type = AVMediaTypeAudio
@@ -149,6 +157,8 @@ class AssetReader: Operation {
         var outputSamples = [CGFloat]()
         var sampleBuffer = Data()
         
+        var sampleData = Data()
+        
         // 16-bit samples
         reader.startReading()
         defer { reader.cancelReading() } // Cancel reading if we exit early if operation is cancelled
@@ -157,22 +167,39 @@ class AssetReader: Operation {
             guard !isCancelled else { return }
             
             guard let readSampleBuffer = readerOutput.copyNextSampleBuffer(),
-                let readBuffer = CMSampleBufferGetDataBuffer(readSampleBuffer) else {
-                    break
-            }
+                let readBuffer = CMSampleBufferGetDataBuffer(readSampleBuffer) else { break }
             
-            // Append audio sample buffer into our current sample buffer
+            
+            
+            // Using CMBlockBufferCopyDataBytes
+            let length = CMBlockBufferGetDataLength(readBuffer)
+            
+            let data = NSMutableData(length: length)
+            CMBlockBufferCopyDataBytes(readBuffer, 0, length, data!.mutableBytes)
+            let samples = data?.mutableBytes.assumingMemoryBound(to: UInt8.self)
+            sampleData.append(samples!, count: length)
+            let presentationTime: CMTime? = CMSampleBufferGetPresentationTimeStamp(readSampleBuffer)
+
+            CMSampleBufferInvalidate(readSampleBuffer)
+            
+            print("episode: \(soundFile.resource) -- sample data \(sampleData.count) -- presentation time \(presentationTime!.seconds)")
+
+            
+            // Using CMBlockBufferGetDataPointer
             var readBufferLength = 0
             var readBufferPointer: UnsafeMutablePointer<Int8>?
             CMBlockBufferGetDataPointer(readBuffer, 0, &readBufferLength, nil, &readBufferPointer)
             
             sampleBuffer.append(UnsafeBufferPointer(start: readBufferPointer, count: readBufferLength))
-            let presentationTime: CMTime? = CMSampleBufferGetPresentationTimeStamp(readSampleBuffer)
+//            let presentationTime: CMTime? = CMSampleBufferGetPresentationTimeStamp(readSampleBuffer)
             CMSampleBufferInvalidate(readSampleBuffer)
             
             print("episode: \(soundFile.resource) -- sample buffer \(sampleBuffer.count) -- presentation time \(presentationTime!.seconds)")
             
-            let totalSamples = sampleBuffer.count / MemoryLayout<Int16>.size
+
+            
+            // Use sampleBuffer or sampleData
+            let totalSamples = sampleData.count / MemoryLayout<UInt8>.size
             
             let downSampledLength = totalSamples / adjustedRate
 //            let samplesToProcess = downSampledLength * adjustedRate
@@ -180,8 +207,8 @@ class AssetReader: Operation {
             
             // Pass in totalSamples for samplesToProcess to process when NOT downsampling
             let samplesToProcess = totalSamples
-
-            processSamples(fromData: &sampleBuffer,
+            
+            processSamples(fromData: &sampleData,
                            outputSamples: &outputSamples,
                            samplesToProcess: samplesToProcess,
                            downSampledLength: downSampledLength,
@@ -191,7 +218,8 @@ class AssetReader: Operation {
         }
         
         if reader.status == .completed {
-            normalize()
+            
+//            normalize()
         }
         
         if reader.status == .failed {
@@ -216,47 +244,53 @@ class AssetReader: Operation {
             print(normalized, time.seconds)
             return (normalized, time)
         }
+        
         presentationTimes = normalizedData.filter { $0.0 < filterThreshold }.map { $0.1 }
         
-        
-        // Try calculating sampleDuration by the difference between consecutive samples
-        // (vs the formula 
-        sampleDuration = normalizedData[4].1.seconds - normalizedData[3].1.seconds
+  
     }
     
     func processSamples(fromData sampleBuffer: inout Data, outputSamples: inout [CGFloat], samplesToProcess: Int, downSampledLength: Int, adjustedRate: Int, filter: [Float], presentationTime: CMTime?) {
         
-        sampleBuffer.withUnsafeBytes { (samples: UnsafePointer<Int16>) in
+        sampleBuffer.withUnsafeBytes { (samples: UnsafePointer<Int8>) in
             
             var processingBuffer = [Float](repeating: 0.0, count: samplesToProcess)
             
             let sampleCount = vDSP_Length(samplesToProcess)
             
             //Convert 16bit int samples to floats
-            vDSP_vflt16(samples, 1, &processingBuffer, 1, sampleCount)
+            vDSP_vflt8(samples, 1, &processingBuffer, 1, sampleCount)
             
             //Take the absolute values to get amplitude
             vDSP_vabs(processingBuffer, 1, &processingBuffer, 1, sampleCount)
             
             //Downsample and average
-            var downSampledData = [Float](repeating: 0.0, count: downSampledLength)
-            vDSP_desamp(processingBuffer,
-                        vDSP_Stride(adjustedRate),
-                        filter,
-                        &downSampledData,
-                        vDSP_Length(downSampledLength),
-                        vDSP_Length(adjustedRate))
-            
+//            var downSampledData = [Float](repeating: 0.0, count: downSampledLength)
+//            vDSP_desamp(processingBuffer,
+//                        vDSP_Stride(adjustedRate),
+//                        filter,
+//                        &downSampledData,
+//                        vDSP_Length(downSampledLength),
+//                        vDSP_Length(adjustedRate))
+//            
             
             // Use downSampledData instead of processingBuffer when downsampling
             let downSampledDataCG = processingBuffer.map { CGFloat($0) }
             
             // Remove processed samples
-            sampleBuffer.removeFirst(samplesToProcess * MemoryLayout<Int16>.size)
+            sampleBuffer.removeFirst(samplesToProcess * MemoryLayout<UInt8>.size)
             
             if let amplitude = downSampledDataCG.max() {
                 samplesWithTimes += [(amplitude, presentationTime!)]
+                print(amplitude, presentationTime!)
             }
+            
+            
+            if decibel(downSampledDataCG.max()!) < decibelThreshold {
+                presentationTimes += [presentationTime!]
+            }
+            
+
         }
     }
     
