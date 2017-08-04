@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		2D3526171F0AE72200268060 /* piano.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2D3526161F0AE72200268060 /* piano.mp3 */; };
+		2D8690941F34B57100D9EF34 /* ycombinator.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2D8690931F34B57100D9EF34 /* ycombinator.mp3 */; };
+		2D8690961F34C55E00D9EF34 /* shouldwe.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2D8690951F34C55E00D9EF34 /* shouldwe.mp3 */; };
 		2D9DFE4A1F0A6C620097EEE5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9DFE491F0A6C620097EEE5 /* AppDelegate.swift */; };
 		2D9DFE4C1F0A6C620097EEE5 /* AudioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9DFE4B1F0A6C620097EEE5 /* AudioViewController.swift */; };
 		2D9DFE4F1F0A6C620097EEE5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D9DFE4D1F0A6C620097EEE5 /* Main.storyboard */; };
@@ -15,8 +17,6 @@
 		2D9DFE541F0A6C620097EEE5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D9DFE521F0A6C620097EEE5 /* LaunchScreen.storyboard */; };
 		2D9DFE5F1F0A6C630097EEE5 /* SkipPauseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9DFE5E1F0A6C630097EEE5 /* SkipPauseTests.swift */; };
 		2D9DFE6A1F0A6C630097EEE5 /* SkipPauseUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9DFE691F0A6C630097EEE5 /* SkipPauseUITests.swift */; };
-		2DC15DFD1F167E83001DBC9B /* strangers.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2DC15DFC1F167E83001DBC9B /* strangers.mp3 */; };
-		2DC15DFF1F167EF8001DBC9B /* replyall.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2DC15DFE1F167EF8001DBC9B /* replyall.mp3 */; };
 		2DD4C1601F0BE243001A014E /* SoundFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4C15F1F0BE243001A014E /* SoundFile.swift */; };
 		30295ED0769452920CC90999 /* Pods_SkipPause.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 724656517C32EE14271ECF14 /* Pods_SkipPause.framework */; };
 		4BAB55517231022FE5774141 /* Pods_SkipPauseTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3448FB228D3D2517A95B2FF4 /* Pods_SkipPauseTests.framework */; };
@@ -45,6 +45,8 @@
 		15453EB69CC119133D5FBC07 /* Pods-SkipPauseUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SkipPauseUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SkipPauseUITests/Pods-SkipPauseUITests.release.xcconfig"; sourceTree = "<group>"; };
 		2CE37348765133B4D0C08095 /* Pods-SkipPauseTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SkipPauseTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SkipPauseTests/Pods-SkipPauseTests.release.xcconfig"; sourceTree = "<group>"; };
 		2D3526161F0AE72200268060 /* piano.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = piano.mp3; sourceTree = "<group>"; };
+		2D8690931F34B57100D9EF34 /* ycombinator.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ycombinator.mp3; sourceTree = "<group>"; };
+		2D8690951F34C55E00D9EF34 /* shouldwe.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = shouldwe.mp3; sourceTree = "<group>"; };
 		2D9DFE461F0A6C620097EEE5 /* SkipPause.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SkipPause.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D9DFE491F0A6C620097EEE5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2D9DFE4B1F0A6C620097EEE5 /* AudioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioViewController.swift; sourceTree = "<group>"; };
@@ -58,8 +60,6 @@
 		2D9DFE651F0A6C630097EEE5 /* SkipPauseUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SkipPauseUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D9DFE691F0A6C630097EEE5 /* SkipPauseUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkipPauseUITests.swift; sourceTree = "<group>"; };
 		2D9DFE6B1F0A6C630097EEE5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2DC15DFC1F167E83001DBC9B /* strangers.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = strangers.mp3; sourceTree = "<group>"; };
-		2DC15DFE1F167EF8001DBC9B /* replyall.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = replyall.mp3; sourceTree = "<group>"; };
 		2DD4C15F1F0BE243001A014E /* SoundFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundFile.swift; sourceTree = "<group>"; };
 		3448FB228D3D2517A95B2FF4 /* Pods_SkipPauseTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SkipPauseTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DE0F40663E1D7C16FC206F5 /* Pods-SkipPause.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SkipPause.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SkipPause/Pods-SkipPause.debug.xcconfig"; sourceTree = "<group>"; };
@@ -101,8 +101,8 @@
 			isa = PBXGroup;
 			children = (
 				2D3526161F0AE72200268060 /* piano.mp3 */,
-				2DC15DFC1F167E83001DBC9B /* strangers.mp3 */,
-				2DC15DFE1F167EF8001DBC9B /* replyall.mp3 */,
+				2D8690931F34B57100D9EF34 /* ycombinator.mp3 */,
+				2D8690951F34C55E00D9EF34 /* shouldwe.mp3 */,
 			);
 			name = Sounds;
 			sourceTree = "<group>";
@@ -304,12 +304,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2DC15DFD1F167E83001DBC9B /* strangers.mp3 in Resources */,
 				2D9DFE541F0A6C620097EEE5 /* LaunchScreen.storyboard in Resources */,
+				2D8690961F34C55E00D9EF34 /* shouldwe.mp3 in Resources */,
 				2D9DFE511F0A6C620097EEE5 /* Assets.xcassets in Resources */,
+				2D8690941F34B57100D9EF34 /* ycombinator.mp3 in Resources */,
 				2D3526171F0AE72200268060 /* piano.mp3 in Resources */,
 				2D9DFE4F1F0A6C620097EEE5 /* Main.storyboard in Resources */,
-				2DC15DFF1F167EF8001DBC9B /* replyall.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -25,18 +25,16 @@ class AudioViewController: UIViewController {
     var secondsOfIncreasedPlayback = 0.0
     
     var typePlaying: TypePlaying = .original
-    
     var nowPlaying: SoundFile?
+    var decibelThreshold: Float = -40
+    var samplingRate = 0.05
     
     let piano = SoundFile(resource: "piano")
-    let replyAll = SoundFile(resource: "replyall")
-    let strangers = SoundFile(resource: "strangers")
+    let ycombinator = SoundFile(resource: "ycombinator")
+    let shouldWe = SoundFile(resource: "shouldwe")
     
     let playImage = UIImage(named: "Audio_Bar_Play")
     let pauseImage = UIImage(named: "Audio_Bar_Pause")
-    
-    @IBOutlet weak var picker: UIPickerView?
-    @IBOutlet weak var segementedControl: UISegmentedControl?
     
     @IBOutlet weak var originalTimestamp: UILabel?
     @IBOutlet weak var skippedTimestamp: UILabel?
@@ -55,16 +53,38 @@ class AudioViewController: UIViewController {
         reset()
     }
     
-    @IBAction func changedValue(_ sender: UISegmentedControl) {
+    @IBAction func changedAudioClip(_ sender: UISegmentedControl) {
         reset()
         originalSeconds?.text = ""
         
         if sender.selectedSegmentIndex == 0 {
             nowPlaying = piano
         } else if sender.selectedSegmentIndex == 1 {
-            nowPlaying = replyAll
+            nowPlaying = ycombinator
         } else if sender.selectedSegmentIndex == 2 {
-            nowPlaying = strangers
+            nowPlaying = shouldWe
+        }
+    }
+    
+    @IBAction func changeSamplingRate(_ sender: UISegmentedControl) {
+        reset()
+        if sender.selectedSegmentIndex == 0 {
+            samplingRate = 0.05
+        } else if sender.selectedSegmentIndex == 1 {
+            samplingRate = 0.1
+        } else if sender.selectedSegmentIndex == 2 {
+            samplingRate = 0.2
+        }
+    }
+    
+    @IBAction func changedDecibelThreshold(_ sender: UISegmentedControl) {
+        reset()
+        if sender.selectedSegmentIndex == 0 {
+            decibelThreshold = -40
+        } else if sender.selectedSegmentIndex == 1 {
+            decibelThreshold = -35
+        } else if sender.selectedSegmentIndex == 2 {
+            decibelThreshold = -30
         }
     }
     
@@ -75,7 +95,7 @@ class AudioViewController: UIViewController {
         originalPlayPauseButton?.setImage(playImage, for: .normal)
         skippedPlayPauseButton?.setImage(playImage, for: .normal)
 
-        secondsSaved?.text = "0"
+        secondsSaved?.text = "0 seconds saved"
         
         audioPlayerTimer?.invalidate()
         timer?.invalidate()
@@ -158,7 +178,7 @@ class AudioViewController: UIViewController {
         skippedPlayer?.play()
         skippedPlayPauseButton?.setImage(pauseImage, for: .normal)
 
-        skipSilences()
+        audioPlayerTimer = Timer.scheduledTimer(timeInterval: samplingRate, target: self, selector: #selector(updateRate), userInfo: nil, repeats: true)
         
         typePlaying = .skipped
         timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(updateSlider), userInfo: nil, repeats: true)
@@ -172,17 +192,11 @@ class AudioViewController: UIViewController {
     @IBAction func scrubbedSkippedSlider(_ sender: UISlider) {
         skippedPlayer?.currentTime = Double(sender.value)
         skippedTimestamp?.text = Double(sender.value).timeString()
-        skipSilences()
-    }
-    
-    func skipSilences() {
-        skippedPlayer?.play()
-        audioPlayerTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateRate), userInfo: nil, repeats: true)
+        // need to play here?
     }
     
     func updateRate() {
         guard skippedPlayer?.isPlaying == true else { return }
-        let decibelThreshold = Float(-35)
         
         skippedPlayer?.updateMeters()
                 
@@ -192,7 +206,7 @@ class AudioViewController: UIViewController {
             secondsOfIncreasedPlayback += 0.1
             let totalSecondsSaved = (secondsOfIncreasedPlayback / 3).roundTo(places: 2)
             print("seconds saved: \(totalSecondsSaved)")
-            secondsSaved?.text = ("\(totalSecondsSaved)")
+            secondsSaved?.text = ("\(totalSecondsSaved) seconds saved")
         } else {
             skippedPlayer?.rate = 1
         }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="qM6-Nb-ij6">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="qM6-Nb-ij6">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -31,7 +31,7 @@
             </objects>
             <point key="canvasLocation" x="-538" y="139"/>
         </scene>
-        <!--Skip Silences-->
+        <!--Skip Silences Demo-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="AudioViewController" customModule="SkipPause" customModuleProvider="target" sceneMemberID="viewController">
@@ -44,38 +44,86 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="IGa-sk-sUy">
-                                <rect key="frame" x="16" y="80" width="343" height="428.5"/>
+                                <rect key="frame" x="16" y="80" width="343" height="475"/>
                                 <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select audio clip:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GJ4-Hn-kp7">
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="bordered" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="ka2-VB-cmR">
-                                        <rect key="frame" x="0.0" y="0.0" width="343" height="41"/>
+                                        <rect key="frame" x="0.0" y="28" width="343" height="41"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="WAT-0D-krR"/>
                                         </constraints>
                                         <segments>
                                             <segment title="Piano"/>
-                                            <segment title="Reply All"/>
-                                            <segment title="Strangers"/>
+                                            <segment title="ycombinator"/>
+                                            <segment title="Should We"/>
                                         </segments>
                                         <color key="tintColor" red="0.72549019609999998" green="0.45098039220000002" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
-                                            <action selector="changedValue:" destination="BYZ-38-t0r" eventType="valueChanged" id="sWc-Pf-tOp"/>
+                                            <action selector="changedAudioClip:" destination="BYZ-38-t0r" eventType="valueChanged" id="cXC-IK-ZMn"/>
                                         </connections>
                                     </segmentedControl>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FEu-pD-2WI">
-                                        <rect key="frame" x="43.5" y="50" width="256" height="71.5"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select sampling rate in seconds:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J6J-bo-0l4">
+                                        <rect key="frame" x="0.0" y="78" width="343" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="bordered" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="lhl-1u-f4g">
+                                        <rect key="frame" x="0.0" y="106" width="343" height="41"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="TEL-HQ-02r"/>
+                                        </constraints>
+                                        <segments>
+                                            <segment title="1/20th"/>
+                                            <segment title="1/10th"/>
+                                            <segment title="1/5th"/>
+                                        </segments>
+                                        <color key="tintColor" red="0.72549019609999998" green="0.45098039220000002" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <action selector="changeSamplingRate:" destination="BYZ-38-t0r" eventType="valueChanged" id="F2B-J4-ZAM"/>
+                                        </connections>
+                                    </segmentedControl>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select decibel threshold:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6i5-GO-Y24">
+                                        <rect key="frame" x="0.0" y="156" width="343" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="bordered" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="l4d-xh-9Hc">
+                                        <rect key="frame" x="0.0" y="184" width="343" height="41"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="iE9-8c-WZo"/>
+                                        </constraints>
+                                        <segments>
+                                            <segment title="-40"/>
+                                            <segment title="-35"/>
+                                            <segment title="-30"/>
+                                        </segments>
+                                        <color key="tintColor" red="0.72549019609999998" green="0.45098039220000002" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <action selector="changedDecibelThreshold:" destination="BYZ-38-t0r" eventType="valueChanged" id="KyI-fJ-eZx"/>
+                                        </connections>
+                                    </segmentedControl>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FEu-pD-2WI" userLabel="Spacer">
+                                        <rect key="frame" x="43.5" y="234" width="256" height="20"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="71.5" id="uZP-1r-Fql"/>
+                                            <constraint firstAttribute="height" constant="20" id="uZP-1r-Fql"/>
                                         </constraints>
                                     </view>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Original" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EUo-0t-17O">
-                                        <rect key="frame" x="135.5" y="131.5" width="72.5" height="25.5"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Original Playback" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EUo-0t-17O">
+                                        <rect key="frame" x="101.5" y="264" width="140" height="21.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="E7B-l7-cnN">
-                                        <rect key="frame" x="0.0" y="167" width="343" height="40"/>
+                                        <rect key="frame" x="0.0" y="295.5" width="343" height="40"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Mq-fY-kfS">
                                                 <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
@@ -116,21 +164,21 @@
                                             <constraint firstAttribute="height" priority="999" constant="40" id="bij-Qe-KbS"/>
                                         </constraints>
                                     </stackView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bkr-1R-Vp0">
-                                        <rect key="frame" x="43.5" y="217" width="256" height="71.5"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bkr-1R-Vp0" userLabel="Spacer">
+                                        <rect key="frame" x="43.5" y="345.5" width="256" height="20"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="71.5" id="dYJ-YW-3gQ"/>
+                                            <constraint firstAttribute="height" constant="20" id="dYJ-YW-3gQ"/>
                                         </constraints>
                                     </view>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Skipped" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oz8-Pf-w9B">
-                                        <rect key="frame" x="135" y="298.5" width="73.5" height="24"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Playback with Skip Silences" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oz8-Pf-w9B">
+                                        <rect key="frame" x="60" y="375.5" width="223.5" height="21.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="qwR-xb-5q5">
-                                        <rect key="frame" x="0.0" y="332.5" width="343" height="40"/>
+                                        <rect key="frame" x="0.0" y="407" width="343" height="40"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KhZ-GW-fiQ">
                                                 <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
@@ -168,23 +216,22 @@
                                             <constraint firstAttribute="height" priority="999" constant="40" id="6nE-By-CoX"/>
                                         </constraints>
                                     </stackView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m6k-ee-eAr">
-                                        <rect key="frame" x="167" y="382.5" width="9.5" height="18"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="seconds saved during playback" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S3s-Rz-k5z">
-                                        <rect key="frame" x="64" y="410.5" width="215.5" height="18"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 seconds saved" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m6k-ee-eAr">
+                                        <rect key="frame" x="114" y="457" width="115.5" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstItem="l4d-xh-9Hc" firstAttribute="width" secondItem="IGa-sk-sUy" secondAttribute="width" id="3Fm-Wu-mMQ"/>
                                     <constraint firstItem="E7B-l7-cnN" firstAttribute="width" secondItem="IGa-sk-sUy" secondAttribute="width" id="9pL-Q3-7Kf"/>
+                                    <constraint firstItem="J6J-bo-0l4" firstAttribute="width" secondItem="IGa-sk-sUy" secondAttribute="width" id="IJu-5p-lfU"/>
+                                    <constraint firstItem="lhl-1u-f4g" firstAttribute="width" secondItem="IGa-sk-sUy" secondAttribute="width" id="NiO-L6-frf"/>
                                     <constraint firstItem="ka2-VB-cmR" firstAttribute="width" secondItem="IGa-sk-sUy" secondAttribute="width" id="Tpd-wD-zYd"/>
                                     <constraint firstItem="qwR-xb-5q5" firstAttribute="width" secondItem="IGa-sk-sUy" secondAttribute="width" id="Yxi-kG-Rr9"/>
+                                    <constraint firstItem="6i5-GO-Y24" firstAttribute="width" secondItem="IGa-sk-sUy" secondAttribute="width" id="Zhe-y9-s4M"/>
+                                    <constraint firstItem="GJ4-Hn-kp7" firstAttribute="width" secondItem="IGa-sk-sUy" secondAttribute="width" id="rKb-Jz-ZDZ"/>
                                 </constraints>
                             </stackView>
                         </subviews>
@@ -196,13 +243,12 @@
                             <constraint firstItem="IGa-sk-sUy" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="iwS-ai-YkT"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Skip Silences" id="w32-TJ-lT1"/>
+                    <navigationItem key="navigationItem" title="Skip Silences Demo" id="w32-TJ-lT1"/>
                     <connections>
                         <outlet property="originalPlayPauseButton" destination="9Mq-fY-kfS" id="FrF-l7-OaP"/>
                         <outlet property="originalSlider" destination="Jri-Tu-nXn" id="FTy-RX-XVe"/>
                         <outlet property="originalTimestamp" destination="0jR-FU-10P" id="2aD-sv-9a7"/>
                         <outlet property="secondsSaved" destination="m6k-ee-eAr" id="Wx0-yy-aWf"/>
-                        <outlet property="segementedControl" destination="ka2-VB-cmR" id="0I4-rt-sd5"/>
                         <outlet property="skippedPlayPauseButton" destination="KhZ-GW-fiQ" id="IqP-r2-BUB"/>
                         <outlet property="skippedSlider" destination="Xug-nv-HzN" id="SvA-oW-sDA"/>
                         <outlet property="skippedTimestamp" destination="rmg-6F-ZOj" id="aBq-Tk-sDY"/>

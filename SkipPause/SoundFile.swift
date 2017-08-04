@@ -18,9 +18,7 @@ class SoundFile {
     
     init(resource: String) {
         self.resource = resource
-        
         audioFilePath = Bundle.main.path(forResource: resource, ofType: "mp3")
-        
         guard let audioFilePath = audioFilePath else { return }
         playbackURL = URL(fileURLWithPath: audioFilePath)
     }
