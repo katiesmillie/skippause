@@ -9,30 +9,10 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-SkipPauseTests.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>Pods-SkipPauseUITests.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>2DD40E3B6168486E78069DE67548BE2B</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>83E0FE3CAE3A840A77F8EB6D9EA1CB07</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>CA5199F4E011999EAA6C0D1E85FBB27D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
