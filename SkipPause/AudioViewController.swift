@@ -204,7 +204,7 @@ class AudioViewController: UIViewController {
             averagePower < decibelThreshold {
             skippedPlayer?.rate = 3
             secondsOfIncreasedPlayback += 0.1
-            let totalSecondsSaved = (secondsOfIncreasedPlayback / 3).roundTo(places: 2)
+            let totalSecondsSaved = secondsOfIncreasedPlayback - (secondsOfIncreasedPlayback / 3).roundTo(places: 2)
             print("seconds saved: \(totalSecondsSaved)")
             secondsSaved?.text = ("\(totalSecondsSaved) seconds saved")
         } else {
